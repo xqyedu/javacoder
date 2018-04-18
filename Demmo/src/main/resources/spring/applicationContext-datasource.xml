@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	 xmlns:aop="http://www.springframework.org/schema/aop"
+	 xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx  
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+	        <bean id="proxoolDataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
+            <property name="alias">
+                <value>tenement</value>
+            </property>
+            <property name="driver">
+                <value>com.mysql.jdbc.Driver</value>
+            </property>
+            <property name="driverUrl">
+                <value>jdbc:mysql://localhost:3306/foo?useUnicode=true&amp;characterEncoding=utf8</value>
+            </property>
+            <property name="user">
+                <value>root</value>
+            </property>
+            <property name="password">
+                <value>root</value>
+            </property>
+            <!-- 最大连接数（默认5个）,超过了这个连接数,再有请求时,就排在队列中等候 -->
+            <property name="maximumConnectionCount">
+                <value>20</value>
+            </property>
+            <!-- 最小连接数（默认2个） -->
+            <property name="minimumConnectionCount">
+                <value>3</value>
+            </property>
+            <!-- 最少保持的空闲连接数（默认2个） -->
+            <property name="prototypeCount">
+                <value>3</value>
+            </property>
+            <!-- 是否记录数据库的每一步操作 -->
+            <property name="trace">
+                <value>true</value>
+            </property>
+            <!-- 是否同时记录多个STUFF，会产生多个日志 -->
+            <property name="verbose">
+                <value>true</value>
+            </property>
+            <!-- proxool自动侦察各个连接状态的时间间隔（毫秒）,侦察到空闲的连接就马上回收,超时的销毁 默认30秒 -->
+            <property name="houseKeepingSleepTime">
+                <value>90000</value>
+            </property>
+            <!-- 保持数据库连接所使用的SQL语句 -->
+            <property name="houseKeepingTestSql">
+                <value>SELECT CURRENT_DATE</value>
+            </property>
+        </bean>
+	<!-- spring管理事务 -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- Spring的声明式事务管理 -->
+	<!-- 设置与事务有关的各种属性 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="insert*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="add*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="update*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="del*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="*" read-only="false" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 声明切入点 -->
+	<aop:config>
+		<aop:pointcut id="txPointCuts"
+			expression="execution(* com.it.study.dao.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointCuts" />
+	</aop:config>
+</beans>
