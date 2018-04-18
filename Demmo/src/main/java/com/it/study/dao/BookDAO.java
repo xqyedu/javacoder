@@ -11,10 +11,10 @@ import java.util.List;
 * 图书数据访问接口
 */
 public interface BookDAO {
-/**
-* 获得所有图书
-*/
-public List<Book> getAllBooks();
+    /**
+    * 获得所有图书
+    */
+    public List<Book> getAllBooks();
     /**
     * 根据图书编号获得图书对象
     */
@@ -31,4 +31,4 @@ public List<Book> getAllBooks();
     * 更新图书
     */
     public int update(Book entity);
-    }
+}

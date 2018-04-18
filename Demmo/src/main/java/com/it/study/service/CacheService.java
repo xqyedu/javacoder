@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class CacheService {
 
-/***
-* 测试缓存是否生效
-* @return
-*/
-@Cacheable(value = "myCache",key = "#key")
-public String testCache(String key){
-System.out.println("第一次调用会会打印此语句-------");
-return "cache test success !!!";
-}
+    /***
+    * 测试缓存是否生效
+    * @return
+    */
+    @Cacheable(value = "myCache",key = "#key")
+    public String testCache(String key){
+        System.out.println("第一次调用会会打印此语句-------");
+        return "cache test success !!!";
+    }
 }

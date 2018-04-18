@@ -66,8 +66,8 @@ public class Book implements Serializable{
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
     }
-@Override
-public String toString() {
+    @Override
+    public String toString() {
 return this.getTitle()+"---"+this.getId()+"----"+this.getPrice()+"--------";
 }
 }

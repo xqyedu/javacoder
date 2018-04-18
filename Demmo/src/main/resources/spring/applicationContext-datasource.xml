@@ -9,51 +9,17 @@
         http://www.springframework.org/schema/aop/spring-aop.xsd
 		http://www.springframework.org/schema/tx  
         http://www.springframework.org/schema/tx/spring-tx.xsd">
-	        <bean id="proxoolDataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
-            <property name="alias">
-                <value>tenement</value>
-            </property>
-            <property name="driver">
-                <value>com.mysql.jdbc.Driver</value>
-            </property>
-            <property name="driverUrl">
-                <value>jdbc:mysql://localhost:3306/foo?useUnicode=true&amp;characterEncoding=utf8</value>
-            </property>
-            <property name="user">
-                <value>root</value>
-            </property>
-            <property name="password">
-                <value>root</value>
-            </property>
-            <!-- 最大连接数（默认5个）,超过了这个连接数,再有请求时,就排在队列中等候 -->
-            <property name="maximumConnectionCount">
-                <value>20</value>
-            </property>
-            <!-- 最小连接数（默认2个） -->
-            <property name="minimumConnectionCount">
-                <value>3</value>
-            </property>
-            <!-- 最少保持的空闲连接数（默认2个） -->
-            <property name="prototypeCount">
-                <value>3</value>
-            </property>
-            <!-- 是否记录数据库的每一步操作 -->
-            <property name="trace">
-                <value>true</value>
-            </property>
-            <!-- 是否同时记录多个STUFF，会产生多个日志 -->
-            <property name="verbose">
-                <value>true</value>
-            </property>
-            <!-- proxool自动侦察各个连接状态的时间间隔（毫秒）,侦察到空闲的连接就马上回收,超时的销毁 默认30秒 -->
-            <property name="houseKeepingSleepTime">
-                <value>90000</value>
-            </property>
-            <!-- 保持数据库连接所使用的SQL语句 -->
-            <property name="houseKeepingTestSql">
-                <value>SELECT CURRENT_DATE</value>
-            </property>
-        </bean>
+    <bean id="dataSourceWeHealth" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${proxool.driver}"/>
+        <property name="url" value="${proxool.url}"/>
+        <property name="username" value="${proxool.user}"/>
+        <property name="password" value="${proxool.password}"/>
+        <property name="maxActive" value="20"/>
+        <property name="maxIdle" value="3"/>
+        <property name="maxWait" value="15000"/>
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <property name="minEvictableIdleTimeMillis" value="180000"/>
+    </bean>
 	<!-- spring管理事务 -->
 	<bean id="txManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

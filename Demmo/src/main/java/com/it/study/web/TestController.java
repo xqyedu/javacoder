@@ -19,28 +19,28 @@ import java.util.List;
 @RequestMapping("/test")
 public class TestController {
 
-@Autowired
-CacheService cacheService;
+    @Autowired
+    CacheService cacheService;
 
-@Autowired
-BookDAO bookDAO;
-/**
-* 测试数据库是否正常
-* @return
-*/
-@RequestMapping("/database")
-public String testDatabase(Model model) {
-StringBuilder builder = new StringBuilder();
-List<Book> list = bookDAO.getAllBooks();
-    for (Book book :
-    list) {
-    builder.append(book.toString()).append("\n");
-    }
-    if(StringUtils.isEmpty(builder.toString())){
-    model.addAttribute("result","请先往数据库添加测试数据------");
-    }
-    model.addAttribute("result",builder.toString());
-    return "/testDatabase";
+    @Autowired
+    BookDAO bookDAO;
+    /**
+    * 测试数据库是否正常
+    * @return
+    */
+    @RequestMapping("/database")
+    public String testDatabase(Model model) {
+        StringBuilder builder = new StringBuilder();
+        List<Book> list = bookDAO.getAllBooks();
+        for (Book book :
+        list) {
+        builder.append(book.toString()).append("\n");
+        }
+        if(StringUtils.isEmpty(builder.toString())){
+        model.addAttribute("result","请先往数据库添加测试数据------");
+        }
+        model.addAttribute("result",builder.toString());
+        return "/testDatabase";
     }
 
     /**
@@ -48,12 +48,12 @@ List<Book> list = bookDAO.getAllBooks();
     * @param model
     * @return
     */
-@RequestMapping("/index")
-public String testPage(Model model){
-System.out.println("success!!!!");
-model.addAttribute("result","project is running successfully!!!");
-return "/index";
-}
+    @RequestMapping("/index")
+    public String testPage(Model model){
+        System.out.println("success!!!!");
+        model.addAttribute("result","project is running successfully!!!");
+        return "/index";
+    }
 
     /**
     * 测试cache配置是否成功
@@ -61,12 +61,18 @@ return "/index";
     */
     @RequestMapping("/cache")
     public String testCache() {
-    String value = cacheService.testCache("cacheTest");
-    return "/cacheTest";
+        String value = cacheService.testCache("cacheTest");
+        return "/cacheTest";
     }
+
+    /**
+     * 测试不带有sitemesh的页面
+     * @param model
+     * @return
+     */
     @RequestMapping("/nositemesh")
     public String noSitemesh(Model model) {
-    model.addAttribute("result", "这是不带有sitemesh的页面");
-    return "/nositemesh";
+        model.addAttribute("result", "这是不带有sitemesh的页面");
+        return "/nositemesh";
     }
 }
